@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Pagina de Edu</h1>
+    <p class="cuenta"></p>
+    <script>
+        function timeout(s){
+            return new Promise(resolve => setTimeout( resolve ,ms));
+        }
+        function cuentaAtras(){
+            let segundos = 5;
+            let cuenta = document.querySelector('.cuenta');
+            let cuentaAtras = setInterval(() =>{
+                cuenta.textContent = `Cuenta Atras: ${segundos} s`;
+                segundos --;
+                if(segundos < 0){
+                    clearInterval(cuentaAtras);
+                    notificacion();
+                }
+            }, 1000);
+
+            function notificacion(){
+                if (Notification.permission === 'granted'){
+                    let notificacion = new Notification('Nuevo Video', {
+                        body: 'haz click aqui para ver el video',
+                        icon: 'notificacion.png'
+                    });
+                    notificacion.addEventListener('click', () =>{
+                        window.location.href='video.html';
+                    });
+                }else{
+                    Notification.requestPermission().then(permission =>{
+                        if (permission === 'granted'){
+                            let notificacion = new Notification('Nuevo Video', {
+                            body: 'haz click aqui para ver el video',
+                            icon: 'notificacion.png'
+                        }); 
+                            notificacion.addEventListener('click', () =>{
+                            window.location.href='video.html';
+                        });
+
+                        }
+                    })
+                }
+            }
+        }
+        window.onload = () => {
+            cuentaAtras();
+        };
+    </script>
+</body>
+</html>
