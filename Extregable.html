@@ -9,21 +9,20 @@
     <h1>Pagina de Edu</h1>
     <p class="cuenta"></p>
     <script>
-        function timeout(s){
-            return new Promise(resolve => setTimeout( resolve ,ms));
-        }
-        function cuentaAtras(){
-            let segundos = 5;
-            let cuenta = document.querySelector('.cuenta');
-            let cuentaAtras = setInterval(() =>{
-                cuenta.textContent = `Cuenta Atras: ${segundos} s`;
-                segundos --;
-                if(segundos < 0){
-                    clearInterval(cuentaAtras);
-                    notificacion();
-                }
-            }, 1000);
+        function timeout(ms) {
+            return new Promise(resolve => {
+                const intervalo = setInterval(() => {
+                    const cuentaElem = document.querySelector('.cuenta');
+                    cuentaElem.textContent = `Cuenta atrás: ${ms} s`;
+                    ms--;
 
+                    if (ms < 0) {
+                        clearInterval(intervalo);
+                        resolve(); 
+                    }
+                }, 1000);
+            });
+        }
             function notificacion(){
                 if (Notification.permission === 'granted'){
                     let notificacion = new Notification('Nuevo Video', {
@@ -48,9 +47,10 @@
                     })
                 }
             }
-        }
-        window.onload = () => {
-            cuentaAtras();
+        
+        window.onload = async () => {
+            await timeout(5); 
+            notificacion();
         };
     </script>
 </body>
